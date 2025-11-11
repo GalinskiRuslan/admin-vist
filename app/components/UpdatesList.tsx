@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./updates-list.module.css";
 import { UpdateStatus, UpdateVersion } from "../types";
 

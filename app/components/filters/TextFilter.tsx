@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./text-filter.module.css";
 
 type TextFilterProps = {

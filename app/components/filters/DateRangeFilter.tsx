@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./date-range-filter.module.css";
 
 type DateRangeFilterProps = {

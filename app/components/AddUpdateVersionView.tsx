@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import styles from "./add-update-version-view.module.css";
 import {

@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import styles from "./filters-panel.module.css";
 import {

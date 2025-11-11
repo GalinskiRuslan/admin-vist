@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./multi-select-filter.module.css";
 
 type Option = {
