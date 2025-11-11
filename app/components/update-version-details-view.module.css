@@ -1,0 +1,145 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.header h2 {
+  margin: 0 0 4px;
+}
+
+.header p {
+  margin: 0;
+  color: #64748b;
+}
+
+.closeButton {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card h3 {
+  margin: 0;
+}
+
+/* ↓↓↓ было dl / dl div / dl dt / dl dd — префикснул локальным классом */
+.card dl {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  column-gap: 12px;
+  row-gap: 8px;
+  margin: 0;
+}
+
+.card dl div {
+  display: contents;
+}
+
+.card dl dt {
+  font-weight: 600;
+}
+
+.card dl dd {
+  margin: 0;
+}
+/* ↑↑↑ */
+
+.filesList,
+.securityList,
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filesList li,
+.securityList li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.fileActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fileActions button {
+  border: 1px solid #cbd5f5;
+  border-radius: 6px;
+  padding: 6px 12px;
+  background: white;
+  cursor: pointer;
+}
+
+.statusControl {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statusControl select {
+  border: 1px solid #cbd5f5;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.helper {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.historyList li {
+  border-left: 3px solid #1d4ed8;
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.historyList strong {
+  font-size: 15px;
+}
+
+.historyList time {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.historyList p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}

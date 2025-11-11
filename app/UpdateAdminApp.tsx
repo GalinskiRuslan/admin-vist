@@ -21,7 +21,7 @@ export enum AdminView {
   DETAILS = "details",
 }
 
-export default async function Page() {
+export const UpdateAdminApp = () => {
   const [activeView, setActiveView] = useState<AdminView>(AdminView.HOME);
   const [filters, setFilters] = useState<FiltersState>(DEFAULT_FILTERS);
   const [selectedVersion, setSelectedVersion] = useState<UpdateVersion | null>(
@@ -187,4 +187,4 @@ export default async function Page() {
       </main>
     </div>
   );
-}
+};

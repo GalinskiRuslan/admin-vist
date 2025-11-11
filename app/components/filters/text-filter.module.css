@@ -1,0 +1,21 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.input {
+  border: 1px solid #cbd5f5;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.input:focus {
+  outline: 2px solid #1d4ed8;
+  border-color: transparent;
+}

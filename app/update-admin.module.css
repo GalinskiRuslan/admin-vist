@@ -1,0 +1,52 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 48px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header h1 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.header p {
+  margin: 0;
+  color: #4a4a4a;
+}
+
+.navigation {
+  display: flex;
+  gap: 12px;
+}
+
+.navigation button {
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  background: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navigation button:hover {
+  background: #f2f2f2;
+}
+
+.activeNavButton {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
