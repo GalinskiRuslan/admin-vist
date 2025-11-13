@@ -3,8 +3,8 @@ import axios from "axios";
 const $axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://test.sgts.kz/api/"
-      : "http://127.0.0.1:8000/api/",
+      ? "https://vista-new-test2.gamma.kz/vista/api/v2"
+      : "https://vista-new-test2.gamma.kz/vista/api/v2",
 });
 
 $axios.interceptors.response.use(
