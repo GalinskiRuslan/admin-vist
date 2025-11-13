@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "../update-admin.module.css";
@@ -19,21 +20,39 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <div>
-          <h1>Администратор обновлений клиентского ПО</h1>
-          <p>Управление версиями, пакетами и безопасностью обновлений</p>
+        <div className={styles.headerTop}>
+          <div className={styles.branding}>
+            <Image
+              src="/logo_.gif"
+              alt="Логотип системы администрирования"
+              width={48}
+              height={48}
+              className={styles.logo}
+            />
+            <div>
+              <h1>Администратор обновлений клиентского ПО</h1>
+              <p>Управление версиями, пакетами и безопасностью обновлений</p>
+            </div>
+          </div>
+          <nav className={styles.navigation} aria-label="Главная навигация">
+            <ul className={styles.navigationList}>
+              {NAVIGATION.map((item) => {
+                const isActive = pathname === item.href;
+
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={isActive ? styles.activeNavLink : styles.navLink}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
-        <nav className={styles.navigation}>
-          {NAVIGATION.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={pathname === item.href ? styles.activeNavButton : ""}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
       </header>
       <main className={styles.content}>{children}</main>
     </div>
