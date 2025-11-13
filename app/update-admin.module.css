@@ -6,47 +6,76 @@
 }
 
 .header {
+  background-color: #339966;
+  color: #ffffff;
+  margin: -32px -48px 0;
+  padding: 24px 48px;
+}
+
+.headerInner {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
   gap: 16px;
 }
 
-.header h1 {
-  font-size: 28px;
-  margin: 0;
+.logo {
+  width: 56px;
+  height: 56px;
 }
 
-.header p {
+.brandText h1 {
+  font-size: 28px;
+  margin: 0 0 4px;
+}
+
+.brandText p {
   margin: 0;
-  color: #4a4a4a;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .navigation {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
 .navigation button {
-  border: 1px solid #d0d0d0;
-  border-radius: 6px;
-  background: white;
-  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 18px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  color: #ffffff;
+  font-weight: 500;
 }
 
 .navigation button:hover {
-  background: #f2f2f2;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .activeNavButton {
-  background: #1d4ed8;
-  color: white;
-  border-color: #1d4ed8;
+  background: #ffffff;
+  color: #339966;
+  border-color: #ffffff;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .headerInner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

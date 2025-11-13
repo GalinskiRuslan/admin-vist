@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import styles from "./update-admin.module.css";
 import {
@@ -131,38 +132,50 @@ export default async function Page() {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <div>
-          <h1>Администратор обновлений клиентского ПО</h1>
-          <p>Управление версиями, пакетами и безопасностью обновлений</p>
-        </div>
-        <nav className={styles.navigation}>
-          <button
-            className={
-              activeView === AdminView.HOME ? styles.activeNavButton : ""
-            }
-            onClick={() => setActiveView(AdminView.HOME)}
-          >
-            Домашняя страница
-          </button>
-          <button
-            className={
-              activeView === AdminView.ADD ? styles.activeNavButton : ""
-            }
-            onClick={() => setActiveView(AdminView.ADD)}
-          >
-            Добавление версии
-          </button>
-          {selectedVersion ? (
+        <div className={styles.headerInner}>
+          <div className={styles.brand}>
+            <Image
+              src="/gamma-white.png"
+              alt="Gamma"
+              width={56}
+              height={56}
+              className={styles.logo}
+              priority
+            />
+            <div className={styles.brandText}>
+              <h1>Администратор обновлений клиентского ПО</h1>
+              <p>Управление версиями, пакетами и безопасностью обновлений</p>
+            </div>
+          </div>
+          <nav className={styles.navigation}>
             <button
               className={
-                activeView === AdminView.DETAILS ? styles.activeNavButton : ""
+                activeView === AdminView.HOME ? styles.activeNavButton : ""
               }
-              onClick={() => setActiveView(AdminView.DETAILS)}
+              onClick={() => setActiveView(AdminView.HOME)}
             >
-              Просмотр версии
+              Домашняя страница
             </button>
-          ) : null}
-        </nav>
+            <button
+              className={
+                activeView === AdminView.ADD ? styles.activeNavButton : ""
+              }
+              onClick={() => setActiveView(AdminView.ADD)}
+            >
+              Добавление версии
+            </button>
+            {selectedVersion ? (
+              <button
+                className={
+                  activeView === AdminView.DETAILS ? styles.activeNavButton : ""
+                }
+                onClick={() => setActiveView(AdminView.DETAILS)}
+              >
+                Просмотр версии
+              </button>
+            ) : null}
+          </nav>
+        </div>
       </header>
       <main className={styles.content}>
         {activeView === AdminView.HOME ? (
