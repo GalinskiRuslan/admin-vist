@@ -1,169 +1,183 @@
+// src/app/components/UpdateDetailsView.tsx
 "use client";
-import { useMemo, useState } from "react";
+
+import { useEffect, useState } from "react";
+import UpdateService, { OS, PublicVersion } from "../services/updateService";
 import styles from "./update-version-details-view.module.css";
-import { UpdateStatus, UpdateVersion } from "../types";
 
-type UpdateVersionDetailsViewProps = {
-  version: UpdateVersion;
-  onClose: () => void;
+type UpdateDetailsViewProps = {
+  appName: string; // "client-fex" | "client-mail" | "client-im"
+  os: OS; // "Windows" | "Linux" | "Android" | "iOS"
+  version: number; // номер версии из API (целое число)
+  onBack?: () => void;
 };
 
-type StatusHistoryEntry = {
-  status: UpdateStatus;
-  updatedAt: string;
-  comment: string;
-};
-
-const mockHistory: StatusHistoryEntry[] = [
-  {
-    status: UpdateStatus.CURRENT,
-    updatedAt: "2024-03-21",
-    comment: "Версия отмечена актуальной для всех клиентов",
-  },
-  {
-    status: UpdateStatus.AVAILABLE,
-    updatedAt: "2024-03-10",
-    comment: "Опубликована для этапа пилотного распространения",
-  },
-  {
-    status: UpdateStatus.ARCHIVE,
-    updatedAt: "2023-12-01",
-    comment: "Перемещена в архив, заменена более новой версией",
-  },
-];
-
-export const UpdateVersionDetailsView = ({
+export const UpdateDetailsView = ({
+  appName,
+  os,
   version,
-  onClose,
-}: UpdateVersionDetailsViewProps) => {
-  const [status, setStatus] = useState<UpdateStatus>(version.status);
-  const history = useMemo(() => mockHistory, []);
+  onBack,
+}: UpdateDetailsViewProps) => {
+  const [data, setData] = useState<PublicVersion | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await UpdateService.getRelease(appName, os, version);
+
+        if (!cancelled) {
+          setData(res.data);
+        }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setError("Не удалось загрузить данные версии");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [appName, os, version]);
+
+  const handleDelete = async () => {
+    if (!confirm("Вы уверены, что хотите удалить этот релиз?")) return;
+
+    try {
+      setDeleting(true);
+      setDeleteError(null);
+
+      await UpdateService.deleteRelease(appName, os, version);
+
+      // Успешно удалили — уходим назад
+      if (onBack) {
+        onBack();
+      } else {
+        // запасной вариант
+        window.history.back();
+      }
+    } catch (e) {
+      console.error(e);
+      setDeleteError("Не удалось удалить релиз");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  if (loading) {
+    return <div className={styles.wrapper}>Загружаем данные версии…</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.wrapper}>
+        <p className={styles.error}>{error}</p>
+        {onBack && (
+          <button className={styles.backButton} onClick={onBack}>
+            Назад
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className={styles.wrapper}>
+        <p>Данные версии не найдены</p>
+        {onBack && (
+          <button className={styles.backButton} onClick={onBack}>
+            Назад
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
-    <section className={styles.container}>
+    <div className={styles.wrapper}>
       <header className={styles.header}>
         <div>
-          <h2>Просмотр версии {version.version}</h2>
-          <p>
-            Управление статусом, просмотр файлов и опций безопасности выбранного
-            обновления
-          </p>
+          <h2>
+            {data.appName} — {data.os}
+          </h2>
+          <p>Версия: {data.version}</p>
         </div>
-        <button className={styles.closeButton} onClick={onClose}>
-          Вернуться к списку
-        </button>
+        <div className={styles.headerActions}>
+          {onBack && (
+            <button className={styles.backButton} onClick={onBack}>
+              Назад к списку
+            </button>
+          )}
+          <button
+            type="button"
+            className={styles.deleteButton}
+            onClick={handleDelete}
+            disabled={deleting}
+          >
+            {deleting ? "Удаляем..." : "Удалить релиз"}
+          </button>
+        </div>
       </header>
 
-      <div className={styles.grid}>
-        <section className={styles.card}>
-          <h3>Основная информация</h3>
-          <dl>
-            <div>
-              <dt>Название</dt>
-              <dd>{version.name}</dd>
-            </div>
-            <div>
-              <dt>Тип ПО</dt>
-              <dd>{version.softwareType}</dd>
-            </div>
-            <div>
-              <dt>Версия</dt>
-              <dd>{version.version}</dd>
-            </div>
-            <div>
-              <dt>Дата публикации</dt>
-              <dd>{version.releaseDate}</dd>
-            </div>
-            <div>
-              <dt>Архитектура</dt>
-              <dd>{version.architecture}</dd>
-            </div>
-          </dl>
-        </section>
+      {deleteError && <p className={styles.error}>{deleteError}</p>}
 
-        <section className={styles.card}>
-          <h3>Файлы</h3>
-          <ul className={styles.filesList}>
-            <li>
-              <span>Описание версии</span>
-              <span>{version.descriptionFile}</span>
-            </li>
-            <li>
-              <span>Пакет обновления</span>
-              <span>{version.packageFile}</span>
-            </li>
-          </ul>
-          <div className={styles.fileActions}>
-            <button type="button">Скачать пакет</button>
-            <button type="button">Проверить подпись</button>
-            <button type="button">Рассчитать хеш</button>
+      <section className={styles.block}>
+        <h3>Общие сведения</h3>
+        <dl className={styles.dl}>
+          <div>
+            <dt>Приложение</dt>
+            <dd>{data.appName}</dd>
           </div>
-        </section>
+          <div>
+            <dt>ОС</dt>
+            <dd>{data.os}</dd>
+          </div>
+          <div>
+            <dt>Версия</dt>
+            <dd>{data.version}</dd>
+          </div>
+          <div>
+            <dt>Размер файла</dt>
+            <dd>{(data.fileSize / (1024 * 1024)).toFixed(2)} МБ</dd>
+          </div>
+          <div>
+            <dt>Путь к файлу</dt>
+            <dd>{data.relativePath}</dd>
+          </div>
+          <div>
+            <dt>Дата публикации</dt>
+            <dd>{data.publishedAt ?? "—"}</dd>
+          </div>
+        </dl>
+      </section>
 
-        <section className={styles.card}>
-          <h3>Статус обновления</h3>
-          <label className={styles.statusControl}>
-            <span>Текущий статус</span>
-            <select
-              value={status}
-              onChange={(event) =>
-                setStatus(event.target.value as UpdateStatus)
-              }
-            >
-              {Object.values(UpdateStatus).map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-          <p className={styles.helper}>
-            В рабочем решении изменение статуса сохранится через API и будет
-            отражено в истории версий.
-          </p>
-        </section>
+      <section className={styles.block}>
+        <h3>Контрольная сумма</h3>
+        <p className={styles.mono}>{data.sha256}</p>
+      </section>
 
-        <section className={styles.card}>
-          <h3>Безопасность</h3>
-          <ul className={styles.securityList}>
-            <li>
-              <span>Контрольная сумма</span>
-              <span>
-                {version.security.shouldHash ? "Рассчитана" : "Ожидает"}
-              </span>
-            </li>
-            <li>
-              <span>Цифровая подпись</span>
-              <span>
-                {version.security.shouldSign ? "Подписан" : "Без подписи"}
-              </span>
-            </li>
-            <li>
-              <span>Шифрование</span>
-              <span>
-                {version.security.shouldEncrypt
-                  ? "Шифрование включено"
-                  : "Без шифрования"}
-              </span>
-            </li>
-          </ul>
+      {data.releaseNotes && (
+        <section className={styles.block}>
+          <h3>Описание версии</h3>
+          <pre className={styles.releaseNotes}>{data.releaseNotes}</pre>
         </section>
-
-        <section className={styles.card}>
-          <h3>История статусов</h3>
-          <ul className={styles.historyList}>
-            {history.map((entry, index) => (
-              <li key={`${entry.status}-${index}`}>
-                <div>
-                  <strong>{entry.status}</strong>
-                  <time>{entry.updatedAt}</time>
-                </div>
-                <p>{entry.comment}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </section>
+      )}
+    </div>
   );
 };

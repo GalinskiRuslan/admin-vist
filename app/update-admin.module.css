@@ -19,8 +19,9 @@
   padding: 12px 20px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(14, 165, 233, 0.08));
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, #339966 0%, #66b38f 100%);
+
+  box-shadow: 0 8px 24px rgba(13, 112, 79, 0.08);
 }
 
 .branding {
@@ -75,7 +76,7 @@
 }
 
 .navLink:hover {
-  background: white;
+  background: #339966;
   box-shadow: 0 6px 16px rgba(30, 64, 175, 0.18);
   transform: translateY(-1px);
 }

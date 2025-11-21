@@ -143,3 +143,29 @@
   color: #475569;
   font-size: 14px;
 }
+/* update-version-details-view.module.css */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteButton {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  background: #fee2e2;
+  color: #b91c1c;
+  cursor: pointer;
+}
+.deleteButton:disabled {
+  opacity: 0.7;
+  cursor: default;
+}

@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import styles from "../update-admin.module.css";
+import AuthService from "../services/authService";
 
 type AdminLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,13 @@ const NAVIGATION = [
 
 export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const pathname = usePathname();
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    AuthService.clearToken();
+    router.replace("/login");
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -36,21 +44,23 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
           </div>
           <nav className={styles.navigation} aria-label="Главная навигация">
             <ul className={styles.navigationList}>
-              {NAVIGATION.map((item) => {
+              {/* {NAVIGATION.map((item) => {
                 const isActive = pathname === item.href;
-
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={isActive ? styles.activeNavLink : styles.navLink}
+                      className={
+                        isActive ? styles.activeNavLink : styles.navLink
+                      }
                     >
                       {item.label}
                     </Link>
                   </li>
                 );
-              })}
+              })} */}
             </ul>
+            <button onClick={handleLogout}>Выйти</button>
           </nav>
         </div>
       </header>
