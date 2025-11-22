@@ -1,5 +1,8 @@
+"use client";
+
 import styles from "./updates-list.module.css";
 import { UpdateStatus, UpdateVersion } from "../types";
+import { useRouter } from "next/navigation";
 
 type UpdatesListProps = {
   updates: UpdateVersion[];
@@ -13,6 +16,20 @@ const statusColors: Record<UpdateStatus, string> = {
 };
 
 export const UpdatesList = ({ updates, onSelectVersion }: UpdatesListProps) => {
+    const router = useRouter();
+  const handleDetailsClick = (update: UpdateVersion) => {
+    // если нужен внешний колбэк — дергаем его
+    if (onSelectVersion) {
+      onSelectVersion(update);
+    }
+
+    // а потом уже роутим на страницу деталей
+    router.push(
+      `/details/${encodeURIComponent(update.appName)}/${update.os}/${
+        update.version
+      }`
+    );
+  };
   return (
     <div className={styles.block}>
       <div className={styles.tableHead}>
@@ -28,13 +45,13 @@ export const UpdatesList = ({ updates, onSelectVersion }: UpdatesListProps) => {
         {updates.map((update) => (
           <div key={update.id} className={styles.row}>
             <span className={styles.nameBlock}>
-              <strong>{update.name}</strong>
+              <strong>{update.appName}</strong>
               <small>{update.softwareType}</small>
             </span>
             <span>{update.version}</span>
             <span>{update.packageType}</span>
             <span>{update.architecture}</span>
-            <span>{update.releaseDate}</span>
+            <span>{update.releaseDate || "—"}</span>
             <span>
               <span
                 className={styles.statusBadge}
@@ -53,6 +70,12 @@ export const UpdatesList = ({ updates, onSelectVersion }: UpdatesListProps) => {
             </span>
           </div>
         ))}
+
+        {updates.length === 0 && (
+          <div className={styles.row}>
+            <span>Версий не найдено</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import axios from "axios";
-
+import AuthService from "../services/authService";
 const $axios = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? "https://test.sgts.kz/api/"
-      : "http://127.0.0.1:8000/api/",
+      ? "https://vista-new-test2.gamma.kz"
+      : "https://vista-new-test2.gamma.kz",
 });
 
 $axios.interceptors.response.use(
@@ -13,10 +13,7 @@ $axios.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      setTimeout(() => {
-        window.location.replace("/");
-      }, 2000);
+      AuthService.clearToken();
       return Promise.reject({
         errorText: "Ошибка авторизации",
         status: 401,
@@ -58,8 +55,8 @@ $axios.interceptors.response.use(
   }
 );
 $axios.interceptors.request.use((config: any) => {
-  config.headers.Authorization = localStorage.getItem("token")
-    ? `Bearer ${localStorage.getItem("token")}`
+  config.headers.Authorization = localStorage.getItem("webuser_token")
+    ? `Bearer ${localStorage.getItem("webuser_token")}`
     : `Bearer ${localStorage.getItem("token_for_register")}`;
   return config;
 });

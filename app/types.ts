@@ -1,14 +1,6 @@
-export enum ClientSoftwareType {
-  FEX = "FEX клиент",
-  MAIL = "Почтовый клиент",
-  IM = "Инстант мессенджер",
-}
+export type ClientSoftwareType = "client-fex" | "client-mail" | "client-im";
 
-export enum PackageType {
-  MSI = "MSI",
-  DEB = "DEB",
-  RPM = "RPM",
-}
+export type PackageType = "MSI" | "DEB" | "RPM" | "EXE" | "APK" | "IPA";
 
 export enum Architecture {
   AMD64 = "AMD64 (x86-64)",
@@ -16,9 +8,9 @@ export enum Architecture {
 }
 
 export enum UpdateStatus {
-  CURRENT = "Актуально",
-  AVAILABLE = "Доступно",
-  ARCHIVE = "Архив",
+  CURRENT = "CURRENT",
+  AVAILABLE = "AVAILABLE",
+  ARCHIVE = "ARCHIVE",
 }
 
 export type PackageSecurityOptions = {
@@ -27,20 +19,18 @@ export type PackageSecurityOptions = {
   shouldHash: boolean;
 };
 
-export type UpdateVersion = {
+export interface UpdateVersion {
   id: string;
+  os: string;
+  appName: string;
   softwareType: ClientSoftwareType;
-  name: string;
   version: string;
   packageType: PackageType;
-  architecture: Architecture;
+  architecture: string;
   releaseDate: string;
   status: UpdateStatus;
-  isCurrent: boolean;
-  descriptionFile?: string;
-  packageFile?: string;
-  security: PackageSecurityOptions;
-};
+  isCurrent: any;
+}
 
 export type FiltersState = {
   softwareTypes: ClientSoftwareType[];

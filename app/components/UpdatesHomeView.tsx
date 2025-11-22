@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./updates-home-view.module.css";
 import { FiltersState, UpdateVersion } from "../types";
 import { FiltersPanel } from "./filters/FiltersPanel";
